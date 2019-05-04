@@ -12,7 +12,7 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
     
     let apiUrl = "https://api.themoviedb.org/3/movie/popular?api_key=7ec3cb25106cd4edee5e12ae47b59094&language=en-US"
     
-    var results :[String] = []
+    var results = [Results]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,36 +22,31 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         getDataFromUrl(url)
     }
     
-     func getDataFromUrl(_ url: URL) {
+    fileprivate func getDataFromUrl(_ url: URL) {
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             guard let jsonData = data else { return }
             
             do {
-                
                 let movies = try JSONDecoder().decode(Movie.self, from: jsonData)
-                
-                for result in movies.results {
-                    self.results.append(result.title)
-                }
-                
+                self.results = movies.results
             } catch let jsonError {
                 print("some error with\(jsonError)")
             }
-            
             }.resume()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       print(self.results.count)
-        return self.results.count
+        return results.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
-        cell.textLabel?.text = self.results[indexPath.row]
+        print(self.results[indexPath.row].title)
+        cell.textLabel?.text = self.results[indexPath.row].title
+        tableView.reloadData()
         
         return cell
     }

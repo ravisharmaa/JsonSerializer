@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct Movie: Decodable  {
+struct Movie: Codable  {
     let page: Int
     let total_results: Int
     let total_pages: Int
     let results: [Results]
 }
 
-struct Results: Decodable {
+struct Results: Codable {
     let vote_count :Int
     let id: Int
     let video: Bool
