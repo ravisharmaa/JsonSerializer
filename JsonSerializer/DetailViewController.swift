@@ -10,6 +10,8 @@ import UIKit
 
 class DetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    @IBOutlet weak var tableView: UITableView!
+    
     let apiUrl = "https://api.themoviedb.org/3/movie/popular?api_key=7ec3cb25106cd4edee5e12ae47b59094&language=en-US"
     
     var results = [Results]()
@@ -30,6 +32,10 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
             do {
                 let movies = try JSONDecoder().decode(Movie.self, from: jsonData)
                 self.results = movies.results
+                
+                DispatchQueue.main.async { [weak self] in
+                    self?.tableView.reloadData()
+                }
             } catch let jsonError {
                 print("some error with\(jsonError)")
             }
@@ -43,10 +49,7 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        
-        print(self.results[indexPath.row].title)
         cell.textLabel?.text = self.results[indexPath.row].title
-        tableView.reloadData()
         
         return cell
     }
