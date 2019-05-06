@@ -8,11 +8,11 @@
 
 import UIKit
 
-class DetailViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class DetailViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    let apiUrl = "https://api.themoviedb.org/3/movie/popular?api_key=7ec3cb25106cd4edee5e12ae47b59094&language=en-US"
+    let apiUrl = "https://api.themoviedb.org/3/movie/popular?api_key=7ec3cb25106cd4edee5e12ae47b59094&language=en-US&page=10"
     
     var results = [Results]()
     
@@ -39,7 +39,17 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
             } catch let jsonError {
                 print("some error with\(jsonError)")
             }
-            }.resume()
+        }.resume()
+    }
+    
+    
+    
+}
+
+extension DetailViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -53,8 +63,5 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         
         return cell
     }
-    
-    
-    
-    
 }
+
